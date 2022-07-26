@@ -9,6 +9,8 @@ public class Enemy : MonoBehaviour
 
     [Header("Enemy Thnigs")]
     [SerializeField] public NavMeshAgent enemyAgent;
+    [SerializeField] public Transform lookPoint;
+    [SerializeField] public Camera shootingRaycastArea;
     [SerializeField] public Transform playerBody;
     [SerializeField] public LayerMask playerLayer;
 
@@ -22,7 +24,10 @@ public class Enemy : MonoBehaviour
 
     //[Header("Sounds and UI")]
 
-    //[Header("Enemy Shooting Var")]
+    [Header("Enemy Shooting Var")]
+    [SerializeField] public float timeBtwShoot;
+    bool previouslyShoot;
+
 
     //[Header("Enemy Animation and Spark effect")]
 
@@ -50,6 +55,10 @@ public class Enemy : MonoBehaviour
         {
             PursuePlayer();
         }
+        if (playerInVisisonRadius && playerInShootingRadius)
+        {
+            ShootPlayer();
+        }
     }
     private void Gard()
     {
@@ -61,7 +70,7 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            if (currentEnemyPosition >= walkPoints.Length-1)
+            if (currentEnemyPosition >= walkPoints.Length - 1)
             {
                 currentEnemyPosition = 0;
                 return;
@@ -71,12 +80,31 @@ public class Enemy : MonoBehaviour
     }
     private void PursuePlayer()
     {
-        if(enemyAgent.SetDestination(playerBody.position))
+        if (enemyAgent.SetDestination(playerBody.position))
         {
             //animations
 
             visionRadius = 80f;
             shootingRadius = 25f;
         }
+    }
+    private void ShootPlayer()
+    {
+        enemyAgent.SetDestination(transform.position);
+        transform.LookAt(lookPoint);
+        if (!previouslyShoot)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(shootingRaycastArea.transform.position, shootingRaycastArea.transform.forward, out hit, shootingRadius))
+            {
+                Debug.Log("Shotting " + hit.transform.name);
+            }
+            previouslyShoot = true;
+            Invoke(nameof(ActiveShooting), timeBtwShoot);
+        }
+    }
+    private void ActiveShooting()
+    {
+        previouslyShoot = false;
     }
 }
