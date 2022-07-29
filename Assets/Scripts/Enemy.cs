@@ -7,8 +7,8 @@ public class Enemy : MonoBehaviour
 {
     [Header("Enemy Health and Damage")]
     [SerializeField] private float enemyHealth = 120f;
-    [SerializeField] private float presentHealth = 120f;
-    [SerializeField] public float giveHealth = 5f;
+    [SerializeField] private float presentHealth;
+    [SerializeField] public float giveDamage = 5f;
 
 
     [Header("Enemy Thnigs")]
@@ -103,6 +103,11 @@ public class Enemy : MonoBehaviour
             if (Physics.Raycast(shootingRaycastArea.transform.position, shootingRaycastArea.transform.forward, out hit, shootingRadius))
             {
                 Debug.Log("Shotting " + hit.transform.name);
+                Player playerBody = hit.transform.GetComponent<Player>();
+                if (playerBody != null)
+                {
+                    playerBody.PlayerHitDamage(giveDamage);
+                }
             }
             previouslyShoot = true;
             Invoke(nameof(ActiveShooting), timeBtwShoot);

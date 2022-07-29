@@ -8,7 +8,9 @@ public class Player : MonoBehaviour
     [SerializeField] public float playerSpeed = 1.9f;
     [SerializeField] public float playerSprint = 3f;
 
-    //[Header("Player Health Things")]
+    [Header("Player Health Things")]
+    [SerializeField] private float playerHealth = 120f;
+    [SerializeField] private float PresentHealth;
 
     [Header("Player Script Cameras")]
     [SerializeField] public Transform playerCamera;
@@ -30,6 +32,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        PresentHealth = playerHealth;
         Cursor.lockState = CursorLockMode.Locked;
     }
     void Update()
@@ -123,5 +126,19 @@ public class Player : MonoBehaviour
                 anim.SetBool("Walk", false);
             }
         }
+    }
+    public void PlayerHitDamage(float takeDamage)
+    {
+        PresentHealth -= takeDamage;
+
+        if (PresentHealth <= 0)
+        {
+            PlayerDie();
+        }
+    }
+    private void PlayerDie()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Object.Destroy(gameObject, 1.0f);
     }
 }
