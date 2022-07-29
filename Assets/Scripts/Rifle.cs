@@ -6,7 +6,7 @@ using UnityEngine;
 public class Rifle : MonoBehaviour
 {
     [Header("Rifle Things")]
-    [SerializeField] public Camera camera;
+    [SerializeField] public Camera cam;
     [SerializeField] public float giveDamageOf = 10f;
     [SerializeField] public float shootingRange = 100f;
     [SerializeField] public float fireCharge = 15f;
@@ -27,6 +27,7 @@ public class Rifle : MonoBehaviour
     [SerializeField] public ParticleSystem muzzleSpark;
     [SerializeField] public GameObject impactEffect;
     [SerializeField] public GameObject impactEffectForAll;
+    [SerializeField] public GameObject goreEffect;
 
     //[Header("Sounds and UI")]
 
@@ -38,7 +39,7 @@ public class Rifle : MonoBehaviour
     {
         if (setReloading)
             return;
-        if(presentAmmunition<=0)
+        if (presentAmmunition <= 0)
         {
             StartCoroutine(Relaod());
             return;
@@ -50,7 +51,7 @@ public class Rifle : MonoBehaviour
             nextTimeToShoot = Time.time + 1 / fireCharge;
             Shoot();
         }
-        else if(Input.GetButton("Fire1") && Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+        else if (Input.GetButton("Fire1") && Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
         {
             anim.SetBool("Idel", false);
             anim.SetBool("IdelAim", true);
@@ -77,29 +78,37 @@ public class Rifle : MonoBehaviour
 
     void Shoot()
     {
-        if(mag==0)
+        if (mag == 0)
         {
             // show ammo out text
             return;
         }
         presentAmmunition--;
-        if(presentAmmunition==0)
+        if (presentAmmunition == 0)
         {
             mag--;
         }
         muzzleSpark.Play();
         RaycastHit hitInfo;
 
-        if (Physics.Raycast(camera.transform.position, camera.transform.forward, out hitInfo, shootingRange))
+        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hitInfo, shootingRange))
         {
             Debug.Log(hitInfo.transform.name);
 
             Objects objects = hitInfo.transform.GetComponent<Objects>();
+
+            Enemy enemy = hitInfo.transform.GetComponent<Enemy>();
             if (objects != null)
             {
                 objects.ObjectHitDamage(giveDamageOf);
                 GameObject impactGo = Instantiate(impactEffect, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
                 Destroy(impactGo, 0.5f);
+            }
+            else if (enemy != null)
+            {
+                enemy.EnemyHitDamage(giveDamageOf);
+                GameObject impactGo = Instantiate(goreEffect, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                Destroy(impactGo, 2.0f);
             }
             else
             {

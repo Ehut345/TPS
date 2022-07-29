@@ -5,7 +5,11 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
-    //[Header("Enemy Health and Damage")]
+    [Header("Enemy Health and Damage")]
+    [SerializeField] private float enemyHealth = 120f;
+    [SerializeField] private float presentHealth = 120f;
+    [SerializeField] public float giveHealth = 5f;
+
 
     [Header("Enemy Thnigs")]
     [SerializeField] public NavMeshAgent enemyAgent;
@@ -40,6 +44,7 @@ public class Enemy : MonoBehaviour
 
     private void Awake()
     {
+        presentHealth = enemyHealth;
         playerBody = GameObject.Find("Player").transform;
         enemyAgent = GetComponent<NavMeshAgent>();
     }
@@ -106,5 +111,24 @@ public class Enemy : MonoBehaviour
     private void ActiveShooting()
     {
         previouslyShoot = false;
+    }
+    public void EnemyHitDamage(float takeDmage)
+    {
+        presentHealth -= takeDmage;
+
+        if (presentHealth <= 0)
+        {
+            EnemyDie();
+        }
+    }
+    private void EnemyDie()
+    {
+        enemyAgent.SetDestination(transform.position);
+        enemySpeed = 0f;
+        shootingRadius = -0f;
+        visionRadius = 0f;
+        playerInVisisonRadius = false;
+        playerInShootingRadius = false;
+        Object.Destroy(gameObject, 5.0f);
     }
 }
