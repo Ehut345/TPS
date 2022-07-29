@@ -33,7 +33,9 @@ public class Enemy : MonoBehaviour
     bool previouslyShoot;
 
 
-    //[Header("Enemy Animation and Spark effect")]
+    [Header("Enemy Animation and Spark effect")]
+    [SerializeField] public Animator anim;
+
 
     [Header("Enemy mood situation")]
     [SerializeField] public float visionRadius;
@@ -88,9 +90,21 @@ public class Enemy : MonoBehaviour
         if (enemyAgent.SetDestination(playerBody.position))
         {
             //animations
+            anim.SetBool("Walk", false);
+            anim.SetBool("AimRun", true);
+            anim.SetBool("Shoot", false);
+            anim.SetBool("Die", false);
 
-            visionRadius = 80f;
-            shootingRadius = 25f;
+            //inc range
+            visionRadius = 30f;
+            shootingRadius = 16f;
+        }
+        else
+        {
+            anim.SetBool("Walk", false);
+            anim.SetBool("AimRun", false);
+            anim.SetBool("Shoot", false);
+            anim.SetBool("Die", true);
         }
     }
     private void ShootPlayer()
@@ -108,6 +122,10 @@ public class Enemy : MonoBehaviour
                 {
                     playerBody.PlayerHitDamage(giveDamage);
                 }
+                anim.SetBool("Shoot", true);
+                anim.SetBool("Walk", false);
+                anim.SetBool("AimRun", false);
+                anim.SetBool("Die", false);
             }
             previouslyShoot = true;
             Invoke(nameof(ActiveShooting), timeBtwShoot);
@@ -123,6 +141,11 @@ public class Enemy : MonoBehaviour
 
         if (presentHealth <= 0)
         {
+            anim.SetBool("Shoot", false);
+            anim.SetBool("Walk", false);
+            anim.SetBool("AimRun", false);
+            anim.SetBool("Die", true);
+
             EnemyDie();
         }
     }
