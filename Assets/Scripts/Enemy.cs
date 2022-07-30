@@ -35,6 +35,7 @@ public class Enemy : MonoBehaviour
 
     [Header("Enemy Animation and Spark effect")]
     [SerializeField] public Animator anim;
+    [SerializeField] public ParticleSystem muzzleSpark;
 
 
     [Header("Enemy mood situation")]
@@ -113,6 +114,7 @@ public class Enemy : MonoBehaviour
         transform.LookAt(lookPoint);
         if (!previouslyShoot)
         {
+            muzzleSpark.Play();
             RaycastHit hit;
             if (Physics.Raycast(shootingRaycastArea.transform.position, shootingRaycastArea.transform.forward, out hit, shootingRadius))
             {
