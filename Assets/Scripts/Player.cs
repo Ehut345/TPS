@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
     [Header("Player Movement")]
     [SerializeField] public float playerSpeed = 1.9f;
     [SerializeField] public float playerSprint = 3f;
+    [SerializeField] public HealthBar healthBar;
 
     [Header("Player Health Things")]
     [SerializeField] private float playerHealth = 120f;
@@ -32,8 +33,9 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        PresentHealth = playerHealth;
         Cursor.lockState = CursorLockMode.Locked;
+        PresentHealth = playerHealth;
+        healthBar.GiveFullHealth(playerHealth);
     }
     void Update()
     {
@@ -130,6 +132,7 @@ public class Player : MonoBehaviour
     public void PlayerHitDamage(float takeDamage)
     {
         PresentHealth -= takeDamage;
+        healthBar.SetHealth(PresentHealth);
 
         if (PresentHealth <= 0)
         {

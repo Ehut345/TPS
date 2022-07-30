@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float enemyHealth = 120f;
     [SerializeField] private float presentHealth;
     [SerializeField] public float giveDamage = 5f;
+    [SerializeField] public HealthBar healthBar;
 
 
     [Header("Enemy Thnigs")]
@@ -48,6 +49,7 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         presentHealth = enemyHealth;
+        healthBar.GiveFullHealth(enemyHealth);
         playerBody = GameObject.Find("Player").transform;
         enemyAgent = GetComponent<NavMeshAgent>();
     }
@@ -140,6 +142,7 @@ public class Enemy : MonoBehaviour
     public void EnemyHitDamage(float takeDmage)
     {
         presentHealth -= takeDmage;
+        healthBar.SetHealth(presentHealth);
 
         if (presentHealth <= 0)
         {
