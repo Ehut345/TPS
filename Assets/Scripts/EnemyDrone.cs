@@ -9,7 +9,7 @@ public class EnemyDrone : MonoBehaviour
     [Header("Enemy Drone Health and Damage")]
     [SerializeField] private float enemyHealth = 150f;
     [SerializeField] private float presentHealth;
-    [SerializeField] public float giveDamage = 5f;
+    [SerializeField] public float giveDamage = 3f;
 
 
     [Header("Enemy Drone Thnigs")]
@@ -36,7 +36,9 @@ public class EnemyDrone : MonoBehaviour
 
     [Header("Enemy Drone Animation and Spark effect")]
     [SerializeField] public Animator anim;
-    //[SerializeField] public ParticleSystem muzzleSpark;
+    [SerializeField] public ParticleSystem muzzleSpark;
+    [SerializeField] public ParticleSystem muzzleFlame;
+    [SerializeField] public ParticleSystem destroyEffect;
 
 
     [Header("Enemy Drone mood situation")]
@@ -92,10 +94,10 @@ public class EnemyDrone : MonoBehaviour
         if (enemyAgent.SetDestination(playerBody.position))
         {
             //animations
-            //anim.SetBool("Walk", false);
-            //anim.SetBool("AimRun", true);
-            //anim.SetBool("Shoot", false);
-            //anim.SetBool("Die", false);
+            anim.SetBool("Walk", false);
+            anim.SetBool("AimRun", true);
+            anim.SetBool("Shoot", false);
+            anim.SetBool("Die", false);
 
             //inc range
             visionRadius = 30f;
@@ -103,10 +105,10 @@ public class EnemyDrone : MonoBehaviour
         }
         else
         {
-            //anim.SetBool("Walk", false);
-            //anim.SetBool("AimRun", false);
-            //anim.SetBool("Shoot", false);
-            //anim.SetBool("Die", true);
+            anim.SetBool("Walk", false);
+            anim.SetBool("AimRun", false);
+            anim.SetBool("Shoot", false);
+            anim.SetBool("Die", true);
         }
     }
     private void ShootPlayer()
@@ -115,7 +117,9 @@ public class EnemyDrone : MonoBehaviour
         transform.LookAt(lookPoint);
         if (!previouslyShoot)
         {
-            //muzzleSpark.Play();
+            muzzleSpark.Play();
+            muzzleFlame.Play();
+
             RaycastHit hit;
             if (Physics.Raycast(shootingRaycastArea.transform.position, shootingRaycastArea.transform.forward, out hit, shootingRadius))
             {
@@ -125,10 +129,10 @@ public class EnemyDrone : MonoBehaviour
                 {
                     playerBody.PlayerHitDamage(giveDamage);
                 }
-                //anim.SetBool("Shoot", true);
-                //anim.SetBool("Walk", false);
-                //anim.SetBool("AimRun", false);
-                //anim.SetBool("Die", false);
+                anim.SetBool("Shoot", true);
+                anim.SetBool("Walk", false);
+                anim.SetBool("AimRun", false);
+                anim.SetBool("Die", false);
             }
             previouslyShoot = true;
             Invoke(nameof(ActiveShooting), timeBtwShoot);
@@ -138,22 +142,23 @@ public class EnemyDrone : MonoBehaviour
     {
         previouslyShoot = false;
     }
-    public void EnemyHitDamage(float takeDmage)
+    public void EnemyDroneHitDamage(float takeDmage)
     {
         presentHealth -= takeDmage;
 
         if (presentHealth <= 0)
         {
-            //anim.SetBool("Shoot", false);
-            //anim.SetBool("Walk", false);
-            //anim.SetBool("AimRun", false);
-            //anim.SetBool("Die", true);
+            anim.SetBool("Shoot", false);
+            anim.SetBool("Walk", false);
+            anim.SetBool("AimRun", false);
+            anim.SetBool("Die", true);
 
             EnemyDie();
         }
     }
     private void EnemyDie()
     {
+        destroyEffect.Play();
         enemyAgent.SetDestination(transform.position);
         enemySpeed = 0f;
         shootingRadius = -0f;

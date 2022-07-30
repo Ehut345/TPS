@@ -28,6 +28,7 @@ public class Rifle : MonoBehaviour
     [SerializeField] public GameObject impactEffect;
     [SerializeField] public GameObject impactEffectForAll;
     [SerializeField] public GameObject goreEffect;
+    [SerializeField] public GameObject droneEffect;
 
     //[Header("Sounds and UI")]
 
@@ -88,7 +89,7 @@ public class Rifle : MonoBehaviour
         {
             mag--;
         }
-        muzzleSpark.Play();
+        //muzzleSpark.Play();
         RaycastHit hitInfo;
 
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hitInfo, shootingRange))
@@ -98,19 +99,33 @@ public class Rifle : MonoBehaviour
             Objects objects = hitInfo.transform.GetComponent<Objects>();
 
             Enemy enemy = hitInfo.transform.GetComponent<Enemy>();
+            EnemyDrone drone = hitInfo.transform.GetComponent<EnemyDrone>();
+
             if (objects != null)
             {
+                muzzleSpark.Play();
+
                 objects.ObjectHitDamage(giveDamageOf);
                 GameObject impactGo = Instantiate(impactEffect, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
                 Destroy(impactGo, 0.5f);
             }
             else if (enemy != null)
             {
+                muzzleSpark.Play();
+
                 enemy.EnemyHitDamage(giveDamageOf);
                 GameObject impactGo = Instantiate(goreEffect, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
                 Destroy(impactGo, 2.0f);
             }
-            else
+            else if (drone != null)
+            {
+                muzzleSpark.Play();
+
+                drone.EnemyDroneHitDamage(giveDamageOf);
+                GameObject impactGo = Instantiate(droneEffect, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                Destroy(impactGo, 2.0f);
+            }
+            else if (hitInfo.transform.tag != "Player")
             {
                 GameObject impactGo1 = Instantiate(impactEffectForAll, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
                 Destroy(impactGo1, 0.5f);
