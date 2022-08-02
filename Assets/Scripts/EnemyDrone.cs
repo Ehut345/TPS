@@ -10,6 +10,7 @@ public class EnemyDrone : MonoBehaviour
     [SerializeField] private float enemyHealth = 150f;
     [SerializeField] private float presentHealth;
     [SerializeField] public float giveDamage = 3f;
+    [SerializeField] public Rigidbody rb;
 
 
     [Header("Enemy Drone Thnigs")]
@@ -53,6 +54,7 @@ public class EnemyDrone : MonoBehaviour
         presentHealth = enemyHealth;
         playerBody = GameObject.Find("Player").transform;
         enemyAgent = GetComponent<NavMeshAgent>();
+        rb = GetComponentInChildren<Rigidbody>();
     }
     void Update()
     {
@@ -153,6 +155,7 @@ public class EnemyDrone : MonoBehaviour
             anim.SetBool("AimRun", false);
             anim.SetBool("Die", true);
 
+            rb.isKinematic = false;
             EnemyDie();
         }
     }
