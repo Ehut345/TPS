@@ -19,6 +19,10 @@ namespace KeyNetwork
         [SerializeField] private int waitTimer = 1;
         [SerializeField] private bool pauseInteraction = false;
 
+        [Header("Sounds and UI")]
+        [SerializeField] private AudioClip doorSound;
+        [SerializeField] private AudioSource audioSource;
+
         private void Awake()
         {
             gateAnim = gameObject.GetComponent<Animator>();
@@ -45,6 +49,7 @@ namespace KeyNetwork
             if (!openGate && !pauseInteraction)
             {
                 gateAnim.Play(openAnimationName, 0, 0.0f);
+                audioSource.PlayOneShot(doorSound);
                 openGate = true;
                 ObjectivesComplete.occurance.GetObjectivesDone(true, false, false, false);
                 StartCoroutine(StopGateInterConnection());
@@ -52,6 +57,7 @@ namespace KeyNetwork
             else if (openGate && !pauseInteraction)
             {
                 gateAnim.Play(closeAnimationName, 0, 0.0f);
+                audioSource.PlayOneShot(doorSound);
                 openGate = false;
                 StartCoroutine(StopGateInterConnection());
             }

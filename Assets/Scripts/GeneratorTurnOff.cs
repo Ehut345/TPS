@@ -13,7 +13,10 @@ public class GeneratorTurnOff : MonoBehaviour
     private float radius = 2f;
     public Player player;
     public Animator anim;
-    public AudioSource audioSource;
+
+    [Header("Sounds and UI")]
+    [SerializeField] private AudioClip objectivesCompleteSound;
+    [SerializeField] private AudioSource audioSource;
 
     private void Awake()
     {
@@ -30,6 +33,7 @@ public class GeneratorTurnOff : MonoBehaviour
             redLight.SetActive(true);
             audioSource.Stop();
             ObjectivesComplete.occurance.GetObjectivesDone(true, true, true, false);
+            audioSource.PlayOneShot(objectivesCompleteSound);
         }
         else if (button == false)
         {

@@ -14,6 +14,11 @@ public class Computer : MonoBehaviour
     public Player player;
     [SerializeField] private GameObject computerUI;
     [SerializeField] private int showcomputerUIFor = 5;
+
+    [Header("Sounds and UI")]
+    [SerializeField] private AudioClip objectivesCompleteSound;
+    [SerializeField] private AudioSource audioSource;
+
     private void Awake()
     {
         lights = GetComponent<Light>();
@@ -28,6 +33,7 @@ public class Computer : MonoBehaviour
                 lightsOn = false;
                 lights.intensity = 0;
                 ObjectivesComplete.occurance.GetObjectivesDone(true, true, false, false);
+                audioSource.PlayOneShot(objectivesCompleteSound);
             }
         }
     }

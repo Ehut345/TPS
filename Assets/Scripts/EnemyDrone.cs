@@ -155,6 +155,9 @@ public class EnemyDrone : MonoBehaviour
     {
         presentHealth -= takeDmage;
         healthBar.SetHealth(presentHealth);
+        //inc range
+        visionRadius = 40f;
+        shootingRadius = 20f;
 
         if (presentHealth <= 0)
         {
