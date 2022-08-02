@@ -15,6 +15,8 @@ public class Player : MonoBehaviour
 
     [Header("Player Script Cameras")]
     [SerializeField] public Transform playerCamera;
+    [SerializeField] public GameObject deathCamera;
+    [SerializeField] public GameObject endGameMenu;
 
     [Header("Player Animator and Gravity")]
     [SerializeField] public CharacterController cC;
@@ -141,7 +143,10 @@ public class Player : MonoBehaviour
     }
     private void PlayerDie()
     {
+        endGameMenu.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
+        deathCamera.SetActive(true);
+        Time.timeScale = 0.1f;
         Object.Destroy(gameObject, 1.0f);
     }
 }
