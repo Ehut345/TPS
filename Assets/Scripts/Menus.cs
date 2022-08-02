@@ -9,6 +9,8 @@ public class Menus : MonoBehaviour
     [Header("All menus's")]
     [SerializeField] public GameObject pauseMenu;
     [SerializeField] public GameObject endGameMenu;
+    [SerializeField] public GameObject objectiveMenu;
+    [SerializeField] public GameObject CH;
 
     public static bool gameIsPaused = false;
 
@@ -27,9 +29,23 @@ public class Menus : MonoBehaviour
                 Cursor.lockState = CursorLockMode.None;
             }
         }
+        else if(Input.GetKeyDown(KeyCode.X))
+        {
+            if (gameIsPaused)
+            {
+                RemoveObjectives();
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+            else 
+            {
+                ShowObjectives();
+                Cursor.lockState = CursorLockMode.None;
+            }
+        }
     }
     public void Resume()
     {
+        CH.SetActive(true);
         pauseMenu.SetActive(false);
         Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.Locked;
@@ -37,6 +53,7 @@ public class Menus : MonoBehaviour
     }
     public void Pause()
     {
+        CH.SetActive(false);
         pauseMenu.SetActive(true);
         Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.None;
@@ -54,5 +71,20 @@ public class Menus : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+    public void ShowObjectives()
+    {
+        CH.SetActive(false);
+        objectiveMenu.SetActive(true);
+        Time.timeScale = 0f;
+        gameIsPaused = true;
+    }
+    public void RemoveObjectives()
+    {
+        CH.SetActive(true);
+        objectiveMenu.SetActive(false);
+        Time.timeScale = 1f;
+        Cursor.lockState = CursorLockMode.Locked;
+        gameIsPaused = false;
     }
 }

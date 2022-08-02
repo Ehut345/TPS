@@ -12,6 +12,8 @@ public class Player : MonoBehaviour
     [Header("Player Health Things")]
     [SerializeField] private float playerHealth = 120f;
     [SerializeField] private float PresentHealth;
+    [SerializeField] private AudioClip getHitSound;
+    [SerializeField] private AudioSource audioSource;
 
     [Header("Player Script Cameras")]
     [SerializeField] public Transform playerCamera;
@@ -135,6 +137,7 @@ public class Player : MonoBehaviour
     {
         PresentHealth -= takeDamage;
         healthBar.SetHealth(PresentHealth);
+        //audioSource.PlayOneShot(getHitSound);
 
         if (PresentHealth <= 0)
         {

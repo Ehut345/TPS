@@ -27,6 +27,7 @@ public class Computer : MonoBehaviour
                 StartCoroutine(ShowComputerUI());
                 lightsOn = false;
                 lights.intensity = 0;
+                ObjectivesComplete.occurance.GetObjectivesDone(true, true, false, false);
             }
         }
     }

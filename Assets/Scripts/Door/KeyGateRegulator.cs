@@ -25,7 +25,7 @@ namespace KeyNetwork
         }
         public void StartAnimantion()
         {
-            if(keyList.hasKey)
+            if (keyList.hasKey)
             {
                 OpenGate();
             }
@@ -46,6 +46,7 @@ namespace KeyNetwork
             {
                 gateAnim.Play(openAnimationName, 0, 0.0f);
                 openGate = true;
+                ObjectivesComplete.occurance.GetObjectivesDone(true, false, false, false);
                 StartCoroutine(StopGateInterConnection());
             }
             else if (openGate && !pauseInteraction)
